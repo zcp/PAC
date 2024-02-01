@@ -1,0 +1,2 @@
+ ./spark-submit --class com.github.ehiggs.spark.terasort.TeraSort /home/zcp/Downloads/spark-terasort-master/target/spark-terasort-1.2-SNAPSHOT-jar-with-dependencies.jar zstd 32 true t t f f f f file:///home/zcp/terasort_in file:///home/zcp/terasort_out/
+

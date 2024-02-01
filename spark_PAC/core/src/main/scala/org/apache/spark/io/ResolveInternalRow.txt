@@ -1,0 +1,123 @@
+
+package org.apache.spark.io
+
+import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.catalyst.expressions.UnsafeRow
+import org.apache.spark.sql.execution.UnsafeRowSerializer
+
+import java.io.File
+import java.io.FileInputStream
+
+object ResolveInternalRow {
+  def main(args: Array[String]): Unit = {
+
+    val spark = SparkSession
+      .builder
+      .config("spark.shuffle.compress", false)
+      .config("spark.kaezip.buffersize", 32)
+      .config("spark.zlib.buffersize", 32)
+      .config("spark.shufflewrite.optimization", "true")
+      .config("spark.shuffleread.optimization", "true")
+      .config("spark.mylogger.flag", "false")
+      .config("spark.shuffle.files.save", "true")
+      .master(master = "local[4]")
+      .getOrCreate()
+
+    // var input = args(0);
+    // val func = args(1)
+
+    //input = "/home/results/E4-1-1000010000-kaezip-text-run_sql_join/lda_temp_files/40186299096092_temp_shuffle_01060d89-10d7-4b76-a9ef-c23140eda594_0"
+    val input3 = "/tmp/monitor/lda_temp_files/" +
+                 "445185692975_temp_shuffle_3db1fe52-6a6a-457e-8707-242ae1b60765_0"
+    val input4 = "/tmp/monitor/lda_temp_files/" +
+      "563828889774_temp_shuffle_3c03276a-5a24-42c0-8c73-30c8573a52c7_0"
+    val input_dir = "/home/results/E4-1-1000010000-kaezip-text-run_sql_join/lda_temp_files/"
+   /*
+    if (func == "uncompress")
+      uncompress(input)
+    if (func == "uncompress_files")
+      uncompress_files(input_dir)
+    if (func == "read_raw_data")
+      read_raw_data(input)
+  */
+    // read_raw_data(input3)
+    uncompress(input4)
+    spark.close()
+  }
+
+  def read_raw_data(input: String): Unit = {
+    val serializer = new UnsafeRowSerializer(numFields = 1).newInstance()
+    val in = new FileInputStream(input);
+    val deserializerIter = serializer.deserializeStream(in).asKeyValueIterator
+    var count = 0
+    while (deserializerIter.hasNext) {
+      // try {
+        val obj = deserializerIter.next()
+
+        print("obj #" + count + " is a: " + obj.getClass() + "\n");
+        print(obj + ".toString(): " + obj + "\n");
+        count = count + 1
+     // } catch {
+     //   case e: Exception => print(e + "\n")
+     // }
+
+
+    }
+    in.close()
+  }
+
+  def uncompress(input: String): Unit = {
+    val serializer = new UnsafeRowSerializer(numFields = 1).newInstance()
+    val kae_in = new KaeInflaterInputStream(new FileInputStream(input));
+    val deserializerIter = serializer.deserializeStream(kae_in).asKeyValueIterator
+
+    var count = 0
+    while (deserializerIter.hasNext) {
+      val obj = deserializerIter.next()
+      print("obj #" + count + " is a: " + obj.getClass() + "\n");
+
+      print(obj + ".toString(): " + obj + "\n");
+      count = count + 1
+
+    }
+    kae_in.close()
+  }
+
+  def getListOfFiles(dir: String): List[File] = {
+    val d = new File(dir)
+    if (d.exists && d.isDirectory) {
+      d.listFiles.filter(_.isFile).toList
+    } else {
+      List[File]()
+    }
+  }
+
+  def uncompress_files(input_dir: String): Int = {
+    val files = getListOfFiles(input_dir)
+
+    var total_count = 0
+    for (f <- files) {
+      print(f)
+      val serializer = new UnsafeRowSerializer(numFields = 2).newInstance()
+      val kae_in = new KaeInflaterInputStream(new FileInputStream(f));
+      val deserializerIter = serializer.deserializeStream(kae_in).asKeyValueIterator
+
+      var count = 0
+      while (deserializerIter.hasNext) {
+        val obj = deserializerIter.next()
+        print("obj #" + count + " is a: " + obj.getClass() + "\n");
+
+        print(obj + ".toString(): " + obj + "\n");
+        count = count + 1
+      }
+      total_count += count
+      kae_in.close()
+    }
+
+    print("total count:" + total_count)
+    total_count
+
+  }
+
+
+}

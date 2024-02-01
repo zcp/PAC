@@ -1,0 +1,23 @@
+127.0.0.1		localhost.localdomain localhost
+::1		localhost6.localdomain6 localhost6
+192.168.10.4  k8s-master
+192.168.10.4  myregistry.local
+192.168.10.11 worker-1
+192.168.10.12 worker-2
+192.168.10.13 worker-3
+192.168.10.14 worker-4
+192.168.10.15 worker-5
+192.168.10.16 worker-6
+192.168.10.17 worker-7
+192.168.10.20 worker-10
+192.168.10.21 worker-11
+192.168.10.22 worker-12
+192.168.10.23 worker-13
+192.168.10.24 worker-14
+192.168.10.25 worker-15
+192.168.10.26 worker-16
+192.168.10.27 worker-17
+
+192.168.10.201 store-1 hadoop-master hadoop-slave1
+192.168.10.202 store-2 hadoop-slave2
+192.168.10.203 store-3

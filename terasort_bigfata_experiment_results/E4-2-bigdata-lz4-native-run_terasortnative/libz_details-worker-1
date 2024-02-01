@@ -1,0 +1,11 @@
+total 668
+drwxr-xr-x   2 root root     20 Aug 13 10:08 pkgconfig
+drwxr-xr-x.  3 root root   4096 Aug 13 10:08 .
+lrwxrwxrwx   1 root root     14 Aug 13 10:08 libz.so.1 -> libz.so.1.2.13
+lrwxrwxrwx   1 root root     14 Aug 13 10:08 libz.so -> libz.so.1.2.13
+-rwxr-xr-x   1 root root 121917 Aug 13 10:08 libz.so.1.2.13
+-rw-r--r--   1 root root 153750 Aug 13 10:08 libz.a
+-rwxr-xr-x   1 root root 117839 Apr 10 22:18 libz.so.1.2.8
+-rwxr-xr-x   1 root root 131343 Apr 10 16:33 libz.so.1.2.12.1-motley
+-rw-------   1 root root 139927 Jun  7  2022 libnativezip.so
+drwxr-xr-x. 12 root root   4096 Oct 26  2020 ..
